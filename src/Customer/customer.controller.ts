@@ -7,12 +7,19 @@ import { brotliDecompressSync } from "zlib";
 import { CustomerService } from "./customer.service";
 import { customerLoginDTO } from "./DTOs/customerLogin.dto";
 import { UserDTO } from "./DTOs/customerProfile.dto";
+import { Pass } from "./DTOs/pass.query";
 
 @Controller("/api/customer")
 export class CustomerController
 {
     constructor(private CustomerService: CustomerService){}
     
+    @Get("/change")
+    ChangePassword(@Query() query:any):any
+    {
+        console.log("asjdhf");
+        return this.CustomerService.changepass(query);
+    } 
     @Get("/index")
     getIndex():any
     {
@@ -57,12 +64,14 @@ export class CustomerController
         return this.CustomerService.login(user);
     }
 
-    @Get("/passchange")
-    ChangePassword(@Query() query:any):any
-    {
-        return this.CustomerService.changepass(query);
-    }
-    
+    // @Post("/loginq")
+    // @UsePipes(new ValidationPipe)
+    // LoginQ(@Query() user:customerLoginDTO)
+    // {
+    //     return this.CustomerService.login(user);
+    // }
+
+
 
 
 }

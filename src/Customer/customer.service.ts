@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
+import { stringify } from "querystring";
 import { customerLoginDTO } from "./DTOs/customerLogin.dto";
 import { UserDTO } from "./DTOs/customerProfile.dto";
+import { Pass } from "./DTOs/pass.query";
 
 @Injectable()
 export class CustomerService
@@ -34,11 +36,13 @@ export class CustomerService
         return user;
     }
     login(user:customerLoginDTO):any
+
     {
         return `User ${user.email} succesfully logged in.`;
     }
-    changepass(query):any
+    changepass(pass:any):any
     {
-        return `Password changed to ${query.pass}.`
+
+        return `Password changed to ${stringify(pass)}.`
     }
 }
