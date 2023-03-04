@@ -34,6 +34,11 @@ export class CustomerController
     getUsers(){
         return this.CustomerService.getUser();
     }
+
+    @Get("/user")
+    getCustomerWithUser(){
+        return this.CustomerService.getCustomerWithUser();
+    }
     @Get("/:id")
     getUserByID(@Param("id", ParseIntPipe) id:number):any
     {
@@ -42,14 +47,14 @@ export class CustomerController
     @Post("/insert")
     @UsePipes(new ValidationPipe)
     CreateUser(@Body() user:UserDTO):any
-    {
+    { 
         return this.CustomerService.createUser(user);
     }
-    @Put("/update")
+    @Put("/update/:id")
     @UsePipes(new ValidationPipe)
-    UpdateUser(@Body() user:UserDTO)
+    UpdateUser(@Body() user:UserDTO, @Param("id", ParseIntPipe) id:number)
     {
-        return this.CustomerService.UpdateUser(user);
+        return this.CustomerService.UpdateUser(id, user);
     }
 
     @Delete("/delete/:id")
