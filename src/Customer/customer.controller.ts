@@ -6,7 +6,7 @@ import { get } from "http";
 import { brotliDecompressSync } from "zlib";
 import { CustomerService } from "./customer.service";
 import { customerLoginDTO } from "./DTOs/customerLogin.dto";
-import { UserDTO } from "./DTOs/customerProfile.dto";
+import { UserDTO } from "./DTOs/CustomerDTO.dto";
 import { Pass } from "./DTOs/pass.query";
 
 @Controller("/api/customer")
@@ -25,11 +25,11 @@ export class CustomerController
     {
         return this.CustomerService.getIndex();
     }
-    @Get("/menu")
-    getMenu():any
-    {
-        return this.CustomerService.getMenu();
-    }
+    // @Get("/menu")
+    // getMenu():any
+    // {
+    //     return this.CustomerService.getMenu();
+    // }
     @Get()
     getUsers(){
         return this.CustomerService.getUser();

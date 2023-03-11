@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { stringify } from "querystring";
 import { customerLoginDTO } from "./DTOs/customerLogin.dto";
-import { UserDTO } from "./DTOs/customerProfile.dto";
+import { UserDTO } from "./DTOs/CustomerDTO.dto";
 import { Pass } from "./DTOs/pass.query";
 import { customerEntity } from "./Entities/customer.entity";
 import { Repository } from 'typeorm';
@@ -20,11 +20,11 @@ export class CustomerService
         // return "Customer index returned";
         return this.customerRepo.find();
     }
-    getMenu():any
-    {
-        // return "Customer menu";
-        return this.customerRepo.find();
-    }
+    // getMenu():any
+    // {
+    //     // return "Customer menu";
+    //     return this.customerRepo.find();
+    // }
     getUserByID(id):any
     {
         // return "the user id is " + id;
@@ -42,7 +42,7 @@ export class CustomerService
         //const newCus = new customerEntity();
         currCus.name = user.name;
         // currCus.email = user.email
-        currCus.no_of_returns = user.no_of_returns
+        currCus.returns = user.returns
 
         return this.customerRepo.update(id,currCus);
         // return this.customerRepo.save(currCus);
@@ -58,7 +58,7 @@ export class CustomerService
 
         newCus.name = user.name;
         // newCus.email = user.email
-        newCus.no_of_returns = user.no_of_returns
+        newCus.no_of_returns = user.returns
 
         return this.customerRepo.save(newCus);
     }

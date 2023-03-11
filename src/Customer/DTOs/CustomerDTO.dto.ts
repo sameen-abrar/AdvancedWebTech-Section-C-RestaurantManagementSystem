@@ -1,4 +1,4 @@
-import { IsEmail, isEmail, IsInt, IsNotEmpty, isNotEmpty, isNumber, IsString, Length } from "class-validator";
+import { IsEmail, isEmail, IsIn, IsInt, IsNotEmpty, isNotEmpty, isNumber, IsPhoneNumber, IsString, Length } from "class-validator";
 
 export class UserDTO
 {
@@ -15,6 +15,16 @@ export class UserDTO
     @IsNotEmpty({message: "Email is required for verification"})
     email: string;
 
+    @IsPhoneNumber('BD')
+    @IsNotEmpty({message:"Must provide a valid number to register"})
+    phone: number;
+
     @IsInt({message: "Should be a valid number"})
-    no_of_returns: number;
+    returns: number;
+
+    @IsInt()
+    userId: number;
+
+
+
 }
