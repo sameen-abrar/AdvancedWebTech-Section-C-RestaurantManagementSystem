@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 import { type } from 'os';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, IsNull } from 'typeorm';
-import { userEntity } from './user.entity';
+import { userEntity } from '../../User/UserEntites/user.entity';
 
 @Entity("customers")
 export class customerEntity
@@ -21,12 +21,12 @@ export class customerEntity
     @Column({nullable: true})
     no_of_returns: number;
 
-    @OneToOne(() => userEntity, (user) => user.customer)
-    @JoinColumn({
-        name: "User_ID"
-        //nullable: false
-    })
+    @OneToOne(() => userEntity, (user) => user.customer, {nullable: false})
+    @JoinColumn()
     user: userEntity
+
+    @Column()
+    userId:number
 
 
 }

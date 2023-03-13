@@ -1,6 +1,7 @@
 import { IsEmail, isEmail, IsIn, IsInt, IsNotEmpty, isNotEmpty, isNumber, IsPhoneNumber, IsString, Length } from "class-validator";
+import { IsNull } from "typeorm";
 
-export class UserDTO
+export class CustomerDTO
 {
     // @IsInt({message: "ID must be integer"})
     // @IsNotEmpty({message: "cannot enter without valid ID"})
@@ -15,12 +16,12 @@ export class UserDTO
     @IsNotEmpty({message: "Email is required for verification"})
     email: string;
 
-    @IsPhoneNumber('BD')
+    // @IsPhoneNumber('BD')
     @IsNotEmpty({message:"Must provide a valid number to register"})
     phone: number;
 
     @IsInt({message: "Should be a valid number"})
-    returns: number;
+    no_of_returns: number;
 
     @IsInt()
     userId: number;

@@ -1,0 +1,96 @@
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository, UpdateResult } from "typeorm";
+import IRepo from "./user.repo";
+import { UserDTO } from "./UserDTOs/user.dto";
+import { userEntity } from "./UserEntites/user.entity";
+import * as bcrypt from 'bcrypt';
+
+@Injectable()
+export class UserService implements IRepo<UserDTO, number, Promise<userEntity>>{
+    
+    constructor(
+        @InjectRepository(userEntity)
+        private UserRepo: Repository<userEntity>,
+      ) {}
+    
+    getById(id: number): any {
+        // throw new Error("Method not implemented.");
+        return this.UserRepo.findOneBy({id});
+    }
+    getAll(): any {
+        // throw new Error("Method not implemented.");
+
+        // console.log(typeof(this.UserRepo.find()));
+        // console.log(this.UserRepo.find());
+        return this.UserRepo.find()
+        
+    }
+    async add(user: UserDTO): Promise<userEntity> {
+        // throw new Error("Method not implemented.");
+
+        const newUser = new userEntity();
+
+        newUser.UserName = user.UserName
+        newUser.Registration_Date = new Date();
+        newUser.Type = user.Type;
+        
+        
+        // newUser.Password = user.Password
+
+        const salt = await bcrypt.genSalt();
+        const hashedpass = await bcrypt.hash(user.Password, salt);
+        newUser.Password= hashedpass;
+        // return this.UserRepo.save(ne);
+
+        const add = this.UserRepo.save(newUser)
+
+        return add;
+
+        // return this.UserRepo.insert(obj);
+    }
+    delete(id: number): any {
+        // throw new Error("Method not implemented.");
+        return this.UserRepo.delete(id);
+    }
+    update(id:number, user: UserDTO): Promise<UpdateResult> {
+        // throw new Error("Method not implemented.");
+        const currUser = this.getById(id);
+
+        currUser.UserName = user.UserName
+        currUser.Registration_Date = new Date();
+        currUser.Password = user.Password;
+
+        return this.UserRepo.update(id, currUser);
+
+    }
+    getUserWithCustomer(): any
+    {
+        console.log("here")
+        return this.UserRepo.find({
+            relations: 
+            {
+                customer:true
+            }
+        })
+    }
+
+    async Login(user:UserDTO)
+    {
+        // console.log(user.Password);
+        const mydata= await this.UserRepo.findOneBy({UserName: user.UserName});
+        const isMatch= await bcrypt.compare(user.Password, mydata.Password);
+        if(isMatch) 
+        {
+            console.log("service: ", mydata);
+            user = mydata
+            return user;
+        }
+        else 
+        {
+            return null;
+        }
+        
+    }
+    
+}

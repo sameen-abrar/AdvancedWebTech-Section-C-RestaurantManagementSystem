@@ -2,9 +2,9 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CustomerController } from "./customer.controller";
 import { CustomerService } from "./customer.service";
-import { customerEntity } from "./Entities/customer.entity";
-import { menuEntity } from "./Entities/menu.entity";
-import { userEntity } from "./Entities/user.entity";
+import { customerEntity } from "./CustomerEntities/customer.entity";
+import { menuEntity } from "./CustomerEntities/menu.entity";
+import { userEntity } from "../User/UserEntites/user.entity";
 
 @Module({
     imports:[TypeOrmModule.forFeature([customerEntity, userEntity, menuEntity])],

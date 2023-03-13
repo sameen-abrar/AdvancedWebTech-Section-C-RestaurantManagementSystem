@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { stringify } from "querystring";
-import { customerLoginDTO } from "./DTOs/customerLogin.dto";
-import { UserDTO } from "./DTOs/CustomerDTO.dto";
-import { Pass } from "./DTOs/pass.query";
-import { customerEntity } from "./Entities/customer.entity";
+import { customerLoginDTO } from "./CustomerDTOs/customerLogin.dto";
+import { CustomerDTO } from "./CustomerDTOs/CustomerDTO.dto";
+import { Pass } from "./CustomerDTOs/pass.query";
+import { customerEntity } from "./CustomerEntities/customer.entity";
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class CustomerService
     //     // return "Customer menu";
     //     return this.customerRepo.find();
     // }
-    getUserByID(id):any
+    getUserByID(id:number):any
     {
         // return "the user id is " + id;
         return this.customerRepo.findOneBy({id});
@@ -35,14 +35,18 @@ export class CustomerService
         // return "List of users."
         return this.customerRepo.find();
     }
-    UpdateUser(id, user: UserDTO):any
+    UpdateUser(id, user: CustomerDTO):any
     {
         const currCus = this.getUserByID(id);
         // return `The id ${user.id} is updated.`;
         //const newCus = new customerEntity();
         currCus.name = user.name;
+        currCus.email = user.email;
+        currCus.phone = user.phone;
         // currCus.email = user.email
-        currCus.returns = user.returns
+        currCus.no_of_returns = user.no_of_returns
+        // currCus.userId = user.userId
+
 
         return this.customerRepo.update(id,currCus);
         // return this.customerRepo.save(currCus);
@@ -52,13 +56,17 @@ export class CustomerService
         // return `The id ${id} was deleted.`
         return this.customerRepo.delete(id);
     }
-    createUser(user: UserDTO):any
+    async createUser(user: CustomerDTO): Promise<customerEntity>
     {
         const newCus = new customerEntity();
 
         newCus.name = user.name;
-        // newCus.email = user.email
-        newCus.no_of_returns = user.returns
+        newCus.email = user.email
+        newCus.phone = user.phone;
+        newCus.no_of_returns = user.no_of_returns;
+
+        newCus.userId = user.userId
+
 
         return this.customerRepo.save(newCus);
     }

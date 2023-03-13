@@ -5,9 +5,9 @@ import { query } from "express";
 import { get } from "http";
 import { brotliDecompressSync } from "zlib";
 import { CustomerService } from "./customer.service";
-import { customerLoginDTO } from "./DTOs/customerLogin.dto";
-import { UserDTO } from "./DTOs/CustomerDTO.dto";
-import { Pass } from "./DTOs/pass.query";
+import { customerLoginDTO } from "./CustomerDTOs/customerLogin.dto";
+import { CustomerDTO } from "./CustomerDTOs/CustomerDTO.dto";
+import { Pass } from "./CustomerDTOs/pass.query";
 
 @Controller("/api/customer")
 export class CustomerController
@@ -36,7 +36,8 @@ export class CustomerController
     }
 
     @Get("/user")
-    getCustomerWithUser(){
+    getCustomerWithUser()
+    {
         return this.CustomerService.getCustomerWithUser();
     }
     @Get("/:id")
@@ -46,14 +47,15 @@ export class CustomerController
     }
     @Post("/insert")
     @UsePipes(new ValidationPipe)
-    CreateUser(@Body() user:UserDTO):any
+    CreateUser(@Body() user:CustomerDTO):any
     { 
         return this.CustomerService.createUser(user);
     }
     @Put("/update/:id")
     @UsePipes(new ValidationPipe)
-    UpdateUser(@Body() user:UserDTO, @Param("id", ParseIntPipe) id:number)
+    UpdateUser(@Body() user:CustomerDTO, @Param("id", ParseIntPipe) id:number)
     {
+        console.log("here");
         return this.CustomerService.UpdateUser(id, user);
     }
 
