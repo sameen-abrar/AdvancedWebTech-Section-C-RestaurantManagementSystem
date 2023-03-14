@@ -11,10 +11,25 @@ import { TrasnsactionsEntity } from "./CustomerEntities/transactions.entity";
 import { DineInEntity } from "./CustomerEntities/dinein.entity";
 import { TablesEntity } from "./CustomerEntities/tables.entity";
 import { MenuModule } from "./Menu/menu.module";
+import { MailerModule } from "@nestjs-modules/mailer";
+import { MenuService } from "./Menu/menu.service";
 
 @Module({
-    imports:[TypeOrmModule.forFeature([customerEntity, userEntity, menuEntity, OrderedItemsEntity, CouponsEntity, TrasnsactionsEntity, DineInEntity, TablesEntity])],
+    imports:[  MailerModule.forRoot({
+        transport: {
+          host: 'smtp.gmail.com',
+                   port: 465,
+                   ignoreTLS: true,
+                   secure: true,
+                   auth: {
+                       user: 'sameenabrar13@gmail.com',
+                       pass: 'gdsbdbmlwaigejun'
+                   },
+                  }
+      }), MenuModule,
+      TypeOrmModule.forFeature([customerEntity, userEntity, menuEntity, OrderedItemsEntity, CouponsEntity, TrasnsactionsEntity, DineInEntity, TablesEntity]),],
+
     controllers:[CustomerController],
-    providers:[CustomerService]
+    providers:[CustomerService, MenuService]
 })
 export class CustomerModule{}

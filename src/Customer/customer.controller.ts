@@ -10,6 +10,8 @@ import { retry } from "rxjs";
 import { UserDTO } from "src/User/UserDTOs/user.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
+import { MenuService } from "./Menu/menu.service";
+import { OrderedItemsDTO } from "./CustomerDTOs/OrderedItemsDTO.dto";
 
 @UseGuards(SessionGuard)
 @Controller("/api/customer")
@@ -17,7 +19,9 @@ import { diskStorage } from "multer";
 // @UseGuards(RolesGuard)
 export class CustomerController
 {
-    constructor(private CustomerService: CustomerService){}
+    constructor(private CustomerService: CustomerService,
+        private MenuService: MenuService
+        ){}
     
     
 
@@ -79,10 +83,34 @@ export class CustomerController
         return this.CustomerService.FileUpload(user);     
 
     }
+
+    @Post('/sendemail')
+    sendEmail(@Body() mydata){
+    return this.CustomerService.sendEmail(mydata);
+    }
+
+    @Get("/order/:id")
+    // @UsePipes(ValidationPipe)
+    Order(@Param("id", ParseIntPipe) id: number, @Body() order: OrderedItemsDTO)
+    {
+        order.customerId = id;
+
+        return this.CustomerService.Order(order);
+    }
+
+    @Get("/menu")
+    // @UsePipes(ValidationPipe)
+    ViewMenu()
+    {
+        this.MenuService.getAll();
+
+    }
+
     @Get()
     getUsers(){
         return this.CustomerService.getAll();
     }
+
 
 
 

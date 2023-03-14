@@ -100,6 +100,11 @@ export class UserService {
             user = mydata
             return user;
         }
+        // else if(user.Password == null)
+        // {
+        //     return ({message: "cant read pass"});
+
+        // }
         else 
         {
             return null;

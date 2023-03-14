@@ -9,9 +9,9 @@ async function bootstrap() {
     session({
       secret: 'my-secret',
       resave: true,
-      saveUninitialized: true,
+      saveUninitialized: false,
       cookie: {
-        maxAge: 300000
+        maxAge: 360000000
       }
     }),
   );

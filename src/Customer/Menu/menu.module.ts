@@ -8,7 +8,7 @@ import { menuEntity } from "../CustomerEntities/menu.entity";
 import { MenuController } from "./menu.controller";
 import { MenuService } from "./menu.service";
 @Module({
-    imports:[TypeOrmModule.forFeature([menuEntity]),],
+    imports:[TypeOrmModule.forFeature([menuEntity])],
     controllers:[MenuController],
     providers:[MenuService]
 })

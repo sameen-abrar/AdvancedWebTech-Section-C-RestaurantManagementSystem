@@ -8,6 +8,8 @@ import { customerEntity } from "./CustomerEntities/customer.entity";
 import { Repository, UpdateResult } from 'typeorm';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
+import { MailerService } from "@nestjs-modules/mailer";
+import { OrderedItemsDTO } from "./CustomerDTOs/OrderedItemsDTO.dto";
 
 @Injectable()
 export class CustomerService
@@ -15,6 +17,10 @@ export class CustomerService
     constructor(
         @InjectRepository(customerEntity)
         private customerRepo: Repository<customerEntity>,
+        // @InjectRepository(menuEntity)
+        // private menuRepo: Repository<menuEntity>,
+        private mailerService: MailerService,
+        // private menuService: MenuService
       ) {}
 
       async getById(id: number): Promise<any> {
@@ -90,5 +96,21 @@ export class CustomerService
     {
         console.log("file customer: ", user)
         return await this.update(user.id, user)
+    }
+
+    async sendEmail(mydata)
+    {
+        return   await this.mailerService.sendMail({
+               to: mydata.email,
+               subject: mydata.subject,
+               text: mydata.text, 
+             });
+       
+    }
+
+    Order(order: OrderedItemsDTO)
+    {
+        // const m = new menuEntity()
+        // return this.menuService.getAll();
     }
 }
