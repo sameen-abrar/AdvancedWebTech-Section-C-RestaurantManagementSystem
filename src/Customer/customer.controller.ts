@@ -1,74 +1,87 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query } from "@nestjs/common";
-import { Delete, UsePipes } from "@nestjs/common/decorators";
-import { ValidationPipe } from "@nestjs/common/pipes";
-import { query } from "express";
-import { get } from "http";
-import { brotliDecompressSync } from "zlib";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Session, } from "@nestjs/common";
+import { Delete, UploadedFile, UseGuards, UseInterceptors, UsePipes } from "@nestjs/common/decorators";
+import { FileTypeValidator, MaxFileSizeValidator, ParseFilePipe, ValidationPipe } from "@nestjs/common/pipes";
 import { CustomerService } from "./customer.service";
 import { customerLoginDTO } from "./CustomerDTOs/customerLogin.dto";
 import { CustomerDTO } from "./CustomerDTOs/CustomerDTO.dto";
-import { Pass } from "./CustomerDTOs/pass.query";
+import { SessionGuard } from "src/User/session.guard";
+import { retry } from "rxjs";
+// import session, { Session } from "express-session";
+import { UserDTO } from "src/User/UserDTOs/user.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
 
+@UseGuards(SessionGuard)
 @Controller("/api/customer")
+// @Roles('customer')
+// @UseGuards(RolesGuard)
 export class CustomerController
 {
     constructor(private CustomerService: CustomerService){}
     
-    @Get("/change")
-    ChangePassword(@Query() query:any):any
-    {
-        console.log("asjdhf");
-        return this.CustomerService.changepass(query);
-    } 
-    @Get("/index")
-    getIndex():any
-    {
-        return this.CustomerService.getIndex();
-    }
-    // @Get("/menu")
-    // getMenu():any
-    // {
-    //     return this.CustomerService.getMenu();
-    // }
-    @Get()
-    getUsers(){
-        return this.CustomerService.getUser();
-    }
+    
 
     @Get("/user")
     getCustomerWithUser()
     {
-        return this.CustomerService.getCustomerWithUser();
+        return this.CustomerService.getUserCustomer();
     }
     @Get("/:id")
-    getUserByID(@Param("id", ParseIntPipe) id:number):any
+    async getUserByID(@Param("id", ParseIntPipe) id:number):Promise<any>
     {
-        return this.CustomerService.getUserByID(id);
+        return this.CustomerService.getById(id);
     }
     @Post("/insert")
     @UsePipes(new ValidationPipe)
     CreateUser(@Body() user:CustomerDTO):any
     { 
-        return this.CustomerService.createUser(user);
+        return this.CustomerService.add(user);
     }
     @Put("/update/:id")
     @UsePipes(new ValidationPipe)
     UpdateUser(@Body() user:CustomerDTO, @Param("id", ParseIntPipe) id:number)
     {
         console.log("here");
-        return this.CustomerService.UpdateUser(id, user);
+        return this.CustomerService.update(id, user);
     }
 
     @Delete("/delete/:id")
     DeleteUser(@Param("id", ParseIntPipe) id:number)
     {
-        return this.CustomerService.deleteUser(id);
+        return this.CustomerService.delete(id);
     }
-    @Post("/login")
-    @UsePipes(new ValidationPipe)
-    Login(@Body() user:customerLoginDTO)
+
+    @Post("/upload/:id")
+    @UseInterceptors(FileInterceptor('myfile',
     {
-        return this.CustomerService.login(user);
+        storage:diskStorage({
+            destination: './CustomerUploads',
+            filename: function (req, file, cb) {
+                cb(null,Date.now()+file.originalname)
+            }
+        })
+    }))
+    async FileUpload(@Param("id", ParseIntPipe) id:number, @UploadedFile(  new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 640000 }),
+          new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
+        ],
+      }),) file: Express.Multer.File)
+    {
+        
+        const user = await this.getUserByID(id);
+
+        user.FileName = file.filename;
+        console.log("user: ", user);
+        // user.FileName = file.filename;
+        // console.log("BBB file: ", user.FileName);
+        
+        return this.CustomerService.FileUpload(user);     
+
+    }
+    @Get()
+    getUsers(){
+        return this.CustomerService.getAll();
     }
 
     // @Post("/loginq")

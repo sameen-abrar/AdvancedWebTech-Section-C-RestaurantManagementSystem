@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Req, Session, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import session from 'express-session';
 import { CustomerService } from 'src/Customer/customer.service';
 import { CustomerDTO } from 'src/Customer/CustomerDTOs/CustomerDTO.dto';
 import { SessionGuard } from './session.guard';
@@ -8,20 +9,21 @@ import { UserDTO } from './UserDTOs/user.dto';
 
 @Controller('/api/user')
 export class UserController {
-    constructor(private userService: UserService, private customerService: CustomerService){}
+    constructor(private userService: UserService, 
+        private customerService: CustomerService){}
 
 
     @Get('login')
-    async Login(@Session() session:UserDTO, @Body() user: UserDTO)
+    async Login(@Session() session1:UserDTO, @Body() user: UserDTO)
     {
         const userdata = await this.userService.Login(user);
         console.log("Controller userdata: ", userdata);
         if(userdata !== null)
         {
             console.log("inside if: ", userdata)
-            session.UserName = user.UserName;
+            session1.UserName = user.UserName;
 
-            console.log("session username: ", session.UserName);
+            console.log("session username: ", session1.UserName);
             return userdata;
 
         }
@@ -73,7 +75,7 @@ export class UserController {
             // console.log('New User:', newUser);
             
 
-            const newCus = await this.customerService.createUser(customer);
+            const newCus = await this.customerService.add(customer);
         
             return {newUser, newCus};
         }

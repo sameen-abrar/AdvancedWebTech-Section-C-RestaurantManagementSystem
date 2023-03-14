@@ -4,32 +4,27 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn
 import { userEntity } from '../../User/UserEntites/user.entity';
 // import { menuEntity } from './menu.entity';
 import { OrderedItemsEntity } from './OrderedItems.entity';
+import { TrasnsactionsEntity } from './transactions.entity';
 
-@Entity("menu")
-export class menuEntity
+@Entity("coupons")
+export class CouponsEntity
 {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    Food_Name: string;
+    Code: string;
 
     @Column()
-    Type:string;
+    Percentage:Number;
 
     @Column()
-    Ingredients:string;
+    Validity_Start:Date;
 
     @Column()
-    Description: string;
+    Validity_Expired: Date;
 
-    @Column()
-    SpiceLevel: string;
-
-    @Column()
-    Price: Number
-
-    @OneToMany(() => OrderedItemsEntity, (orderedItems) => orderedItems.customer)
-    orderedItems: OrderedItemsEntity[]
+    @OneToMany(() => TrasnsactionsEntity, (transactions) => transactions.coupons)
+    transactions: TrasnsactionsEntity
 
 }

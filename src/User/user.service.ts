@@ -5,13 +5,19 @@ import IRepo from "./user.repo";
 import { UserDTO } from "./UserDTOs/user.dto";
 import { userEntity } from "./UserEntites/user.entity";
 import * as bcrypt from 'bcrypt';
+import { CustomerService } from "src/Customer/customer.service";
+import { customerEntity } from "src/Customer/CustomerEntities/customer.entity";
 
 @Injectable()
-export class UserService implements IRepo<UserDTO, number, Promise<userEntity>>{
+export class UserService {
     
     constructor(
         @InjectRepository(userEntity)
         private UserRepo: Repository<userEntity>,
+        @InjectRepository(customerEntity)
+        private CustomerRepo: Repository<customerEntity>,
+
+        private customerService: CustomerService
       ) {}
     
     getById(id: number): any {
@@ -49,9 +55,17 @@ export class UserService implements IRepo<UserDTO, number, Promise<userEntity>>{
 
         // return this.UserRepo.insert(obj);
     }
-    delete(id: number): any {
+    async delete(id: number): Promise<any> {
         // throw new Error("Method not implemented.");
-        return this.UserRepo.delete(id);
+
+        const u = await this.CustomerRepo.findOneBy({userId: id});
+        const a = await this.customerService.delete(u.id);
+
+        if(a)
+        {
+            return this.UserRepo.delete(id);
+        }
+        return 0;
     }
     update(id:number, user: UserDTO): Promise<UpdateResult> {
         // throw new Error("Method not implemented.");
@@ -77,7 +91,7 @@ export class UserService implements IRepo<UserDTO, number, Promise<userEntity>>{
 
     async Login(user:UserDTO)
     {
-        // console.log(user.Password);
+        console.log(user.Password);
         const mydata= await this.UserRepo.findOneBy({UserName: user.UserName});
         const isMatch= await bcrypt.compare(user.Password, mydata.Password);
         if(isMatch) 

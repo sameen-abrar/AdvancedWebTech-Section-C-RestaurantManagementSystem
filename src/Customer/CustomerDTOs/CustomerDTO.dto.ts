@@ -26,6 +26,8 @@ export class CustomerDTO
     @IsInt()
     userId: number;
 
+    FileName: string;
+
 
 
 }
