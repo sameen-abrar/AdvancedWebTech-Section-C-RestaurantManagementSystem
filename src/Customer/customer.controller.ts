@@ -55,7 +55,7 @@ export class CustomerController
     @UseInterceptors(FileInterceptor('myfile',
     {
         storage:diskStorage({
-            destination: './CustomerUploads',
+            destination: 'src/CustomerUploads',
             filename: function (req, file, cb) {
                 cb(null,Date.now()+file.originalname)
             }
@@ -83,13 +83,6 @@ export class CustomerController
     getUsers(){
         return this.CustomerService.getAll();
     }
-
-    // @Post("/loginq")
-    // @UsePipes(new ValidationPipe)
-    // LoginQ(@Query() user:customerLoginDTO)
-    // {
-    //     return this.CustomerService.login(user);
-    // }
 
 
 
