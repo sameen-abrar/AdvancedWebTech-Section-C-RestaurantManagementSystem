@@ -1,6 +1,6 @@
 import { IsInt, IsString } from "class-validator";
 
-class CouponsDTO{
+export class CouponsDTO{
 
     id: number;
 

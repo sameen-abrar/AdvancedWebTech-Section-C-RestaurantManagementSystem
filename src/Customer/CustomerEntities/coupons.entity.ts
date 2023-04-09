@@ -24,7 +24,7 @@ export class CouponsEntity
     @Column()
     Validity_Expired: Date;
 
-    @OneToMany(() => TrasnsactionsEntity, (transactions) => transactions.coupons)
+    @OneToMany(() => TrasnsactionsEntity, (transactions) => transactions.coupons,)
     transactions: TrasnsactionsEntity
 
 }

@@ -16,6 +16,7 @@ import { MenuService } from './Menu/menu.service';
 import { CartController } from './Cart/cart.controller';
 import { CartModule } from './Cart/cart.module';
 import { TransactionModule } from './transactions/transaction.module';
+import { CouponsModule } from './coupons/coupons.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { TransactionModule } from './transactions/transaction.module';
     MenuModule,
     CartModule,
     TransactionModule,
+    CouponsModule,
     TypeOrmModule.forFeature([
       customerEntity,
       userEntity,

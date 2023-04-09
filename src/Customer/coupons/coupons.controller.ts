@@ -15,51 +15,52 @@ import { get } from 'http';
 import { brotliDecompressSync } from 'zlib';
 import { SessionGuard } from 'src/User/session.guard';
 // import { CartService } from "./menu.service";
-// import { OrderedItemsDTO } from "../CustomerDTOs/menuDTO.dto";
-import { CartService } from './cart.service';
-import { OrderedItemsDTO } from '../CustomerDTOs/OrderedItemsDTO.dto';
+// import { CouponsDTO } from "../CustomerDTOs/menuDTO.dto";
+import { CouponsService } from './coupons.service';
+// import { CouponsDTO } from '../CustomerDTOs/CouponsDTO.dto';
+import { CouponsDTO } from '../CustomerDTOs/couponsDTO.sto';
 
 // @UseGuards(SessionGuard)
-@Controller('/api/cart')
+@Controller('/api/coupons')
 // @Roles('customer')
 // @UseGuards(RolesGuard)
-export class CartController {
-  constructor(private CartService: CartService) {}
+export class CouponsController {
+  constructor(private CouponsService: CouponsService) {}
 
-  @Get('/menu')
+  @Get('/transactions')
   getMenuWithCart() {
-    return this.CartService.getMenuWithCart();
+    return this.CouponsService.getTransactionsWithCoupons();
   }
   @Get('/:id')
   getById(@Param('id', ParseIntPipe) id: number): any {
-    return this.CartService.getById(id);
+    return this.CouponsService.getById(id);
   }
 
-  @Get('customer/:id')
+  @Get('transactions/:id')
   // @UseGuards(SessionGuard)
   getCustomerWithCartId(@Param('id', ParseIntPipe) id: number): any {
     console.log('in controller');
-    return this.CartService.getCustomerWithCartId(id);
+    return this.CouponsService.getTransactionsWithCouponID(id);
   }
   @Post('/insert')
   @UsePipes(new ValidationPipe())
-  Add(@Body() user: OrderedItemsDTO): any {
-    return this.CartService.add(user);
+  Add(@Body() user: CouponsDTO): any {
+    return this.CouponsService.add(user);
   }
   @Put('/update/:id')
   @UsePipes(new ValidationPipe())
-  Update(@Body() user: OrderedItemsDTO, @Param('id', ParseIntPipe) id: number) {
+  Update(@Body() user: CouponsDTO, @Param('id', ParseIntPipe) id: number) {
     console.log('here');
-    return this.CartService.update(id, user);
+    return this.CouponsService.update(id, user);
   }
 
   @Delete('/delete/:id')
   Delete(@Param('id', ParseIntPipe) id: number) {
-    return this.CartService.delete(id);
+    return this.CouponsService.delete(id);
   }
 
   @Get()
   Get() {
-    return this.CartService.getAll();
+    return this.CouponsService.getAll();
   }
 }
