@@ -23,13 +23,16 @@ export class TrasnsactionsEntity
     orderedItems: OrderedItemsEntity[]
 
     @JoinColumn()
-    @ManyToOne(() => CouponsEntity, (coupons) => coupons.transactions)
+    @ManyToOne(() => CouponsEntity, (coupons) => coupons.transactions, {nullable:true})
     coupons: CouponsEntity
 
     @Column()
     couponsId: Number
 
-    @OneToOne(() => DineInEntity, (dinein) => dinein.transaction)
+    @OneToOne(() => DineInEntity, (dinein) => dinein.transaction, {nullable:true})
     dinein: DineInEntity
+
+    @Column()
+    dineId: Number
 
 }

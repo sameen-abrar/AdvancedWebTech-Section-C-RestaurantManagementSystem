@@ -4,13 +4,11 @@ import { ValidationPipe } from "@nestjs/common/pipes";
 import { query } from "express";
 import { get } from "http";
 import { brotliDecompressSync } from "zlib";
-import { Roles } from "src/roles.decorator";
-import { RolesGuard } from "src/roles.guard";
 import { SessionGuard } from "src/User/session.guard";
 import { MenuService } from "./menu.service";
 import { MenuDTO } from "../CustomerDTOs/menuDTO.dto";
 
-@UseGuards(SessionGuard)
+// @UseGuards(SessionGuard)
 @Controller("/api/menu")
 // @Roles('customer')
 // @UseGuards(RolesGuard)

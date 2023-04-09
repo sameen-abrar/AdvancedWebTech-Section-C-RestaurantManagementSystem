@@ -91,6 +91,29 @@ export class CustomerService
             }
         })
     }
+    getUserWithCustomerId(id): any
+    {
+        console.log("here")
+        return this.customerRepo.find({
+            where:{id:id},
+            relations: 
+            {
+                user:true
+            }
+        })
+    }
+
+    getCartWithCustomerId(id): any
+    {
+        console.log("here")
+        return this.customerRepo.find({
+            where:{id:id},
+            relations: 
+            {
+                orderedItems:true
+            }
+        })
+    }
 
     async FileUpload(user:CustomerDTO): Promise<any>
     {

@@ -34,10 +34,8 @@ export class OrderedItemsEntity
     menuId: Number
 
     @JoinColumn()
-    @ManyToOne(() => TrasnsactionsEntity, (transactions) => transactions.orderedItems)
+    @ManyToOne(() => TrasnsactionsEntity, (transactions) => transactions.orderedItems, {nullable: true})
     transactions: TrasnsactionsEntity
 
-    @Column()
-    transactionId: Number
 
 }
