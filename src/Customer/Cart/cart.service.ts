@@ -72,7 +72,8 @@ export class CartService {
             where:{customerId:id},
             relations: 
             {
-                customer:true
+                customer:true,
+                menu:true
             }
         })
     }
