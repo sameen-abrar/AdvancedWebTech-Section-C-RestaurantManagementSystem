@@ -74,7 +74,7 @@ export class TransactionService {
             where:{id:id},
             relations: 
             {
-                orderedItems:true
+                OrderedItems:true
             }
         })
     }

@@ -10,6 +10,6 @@ export class OrderedItemsDTO
 
     menuId: Number;
 
-    transactionId: Number;
+    transactionsId: Number;
 
 }

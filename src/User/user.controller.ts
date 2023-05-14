@@ -47,7 +47,7 @@ export class UserController {
 
   @Get('customer/:id')
   // @UseGuards(SessionGuard)
-  getCustomerWithUser(@Param('id',ParseIntPipe) id:number ): any {
+  getCustomerWithUser(@Param('id', ParseIntPipe) id: number): any {
     console.log('in controller');
     return this.userService.getCustomerWithUserId(id);
   }
@@ -71,6 +71,9 @@ export class UserController {
 
     const user = data.user;
     const customer = data.customer;
+    user.Registration_Date = new Date();
+    user.Type = 'CUSTOMER';
+    customer.no_of_returns = 0;
 
     console.log('Extracted user:', data.user);
     console.log('Extracted customer:', data.customer);

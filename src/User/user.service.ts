@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConsoleLogger, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import IRepo from './user.repo';
@@ -7,6 +7,7 @@ import { userEntity } from './UserEntites/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CustomerService } from 'src/Customer/customer.service';
 import { customerEntity } from 'src/Customer/CustomerEntities/customer.entity';
+import { Console } from 'console';
 
 @Injectable()
 export class UserService {
@@ -38,14 +39,17 @@ export class UserService {
     newUser.UserName = user.UserName;
     newUser.Registration_Date = new Date();
     newUser.Type = user.Type;
+    
+    console.log("User: ", user);
 
     // newUser.Password = user.Password
+    console.log("New user: ", newUser);
 
     const salt = await bcrypt.genSalt();
     const hashedpass = await bcrypt.hash(user.Password, salt);
     newUser.Password = hashedpass;
     // return this.UserRepo.save(ne);
-
+    console.log("New user: ", newUser);
     const add = this.UserRepo.save(newUser);
 
     return add;
@@ -81,7 +85,7 @@ export class UserService {
       },
     });
   }
-  
+
   getCustomerWithUserId(id) {
     console.log('here');
     return this.UserRepo.find({

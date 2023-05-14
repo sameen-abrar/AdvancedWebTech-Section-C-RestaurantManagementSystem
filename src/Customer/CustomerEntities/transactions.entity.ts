@@ -27,8 +27,11 @@ export class TrasnsactionsEntity {
   @Column()
   Time: Date;
 
-  @OneToMany(() => OrderedItemsEntity, (orderedItems) => orderedItems.customer)
-  orderedItems: OrderedItemsEntity[];
+  @OneToMany(
+    () => OrderedItemsEntity,
+    (OrderedItems) => OrderedItems.transactions,
+  )
+  OrderedItems: OrderedItemsEntity[];
 
   // @JoinColumn()
 
