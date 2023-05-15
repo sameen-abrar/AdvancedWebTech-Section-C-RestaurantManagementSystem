@@ -1,139 +1,124 @@
-import { Injectable, UseInterceptors } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { stringify } from "querystring";
-import { customerLoginDTO } from "./CustomerDTOs/customerLogin.dto";
-import { CustomerDTO } from "./CustomerDTOs/CustomerDTO.dto";
-import { Pass } from "./CustomerDTOs/pass.query";
-import { customerEntity } from "./CustomerEntities/customer.entity";
+import { Injectable, UseInterceptors } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { stringify } from 'querystring';
+import { customerLoginDTO } from './CustomerDTOs/customerLogin.dto';
+import { CustomerDTO } from './CustomerDTOs/CustomerDTO.dto';
+import { Pass } from './CustomerDTOs/pass.query';
+import { customerEntity } from './CustomerEntities/customer.entity';
 import { Repository, UpdateResult } from 'typeorm';
-import { FileInterceptor } from "@nestjs/platform-express";
-import { diskStorage } from "multer";
-import { MailerService } from "@nestjs-modules/mailer";
-import { OrderedItemsDTO } from "./CustomerDTOs/OrderedItemsDTO.dto";
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { MailerService } from '@nestjs-modules/mailer';
+import { OrderedItemsDTO } from './CustomerDTOs/OrderedItemsDTO.dto';
 
 @Injectable()
-export class CustomerService
-{
-    constructor(
-        @InjectRepository(customerEntity)
-        private customerRepo: Repository<customerEntity>,
-        // @InjectRepository(menuEntity)
-        // private menuRepo: Repository<menuEntity>,
-        private mailerService: MailerService,
-        // private menuService: MenuService
-      ) {}
+export class CustomerService {
+  constructor(
+    @InjectRepository(customerEntity)
+    private customerRepo: Repository<customerEntity>,
+    // @InjectRepository(menuEntity)
+    // private menuRepo: Repository<menuEntity>,
+    private mailerService: MailerService,
+  ) // private menuService: MenuService
+  {}
 
-      async getById(id: number): Promise<any> {
-        // throw new Error("Method not implemented.");
-        return this.customerRepo.findOneBy({id});
-    }
-    getAll(): any {
-        // throw new Error("Method not implemented.");
+  async getById(id: number): Promise<any> {
+    // throw new Error("Method not implemented.");
+    return this.customerRepo.findOneBy({ id });
+  }
+  getAll(): any {
+    // throw new Error("Method not implemented.");
 
-        // console.log(typeof(this.customerRepo.find()));
-        // console.log(this.customerRepo.find());
-        return this.customerRepo.find()
-        
-    }
-    async add(user: CustomerDTO): Promise<customerEntity> {
-        // throw new Error("Method not implemented.");
+    // console.log(typeof(this.customerRepo.find()));
+    // console.log(this.customerRepo.find());
+    return this.customerRepo.find();
+  }
+  async add(user: CustomerDTO): Promise<customerEntity> {
+    // throw new Error("Method not implemented.");
 
-        const newUser = new customerEntity();
+    const newUser = new customerEntity();
 
-        newUser.email = user.email
-        newUser.name = user.name
-        newUser.no_of_returns= user.no_of_returns
-        newUser.phone = user.phone
-        newUser.userId = user.userId
+    newUser.email = user.email;
+    newUser.name = user.name;
+    newUser.no_of_returns = user.no_of_returns;
+    newUser.phone = user.phone;
+    newUser.userId = user.userId;
 
-        // newUser.UserName = user.UserName
-        // newUser.Registration_Date = new Date();
-        // newUser.Type = user.Type;
-        
-        
-        // // newUser.Password = user.Password
+    // newUser.UserName = user.UserName
+    // newUser.Registration_Date = new Date();
+    // newUser.Type = user.Type;
 
-        // const salt = await bcrypt.genSalt();
-        // const hashedpass = await bcrypt.hash(user.Password, salt);
-        // newUser.Password= hashedpass;
-        // return this.customerRepo.save(ne);
+    // // newUser.Password = user.Password
 
-        const add = this.customerRepo.save(newUser)
+    // const salt = await bcrypt.genSalt();
+    // const hashedpass = await bcrypt.hash(user.Password, salt);
+    // newUser.Password= hashedpass;
+    // return this.customerRepo.save(ne);
 
-        return add;
+    const add = this.customerRepo.save(newUser);
 
-        // return this.customerRepo.insert(obj);
-    }
-    async delete(id: number): Promise<any> 
-    {
-        return this.customerRepo.delete(id);
-    }
-    async update(id:number, user: CustomerDTO): Promise<any> {
-        // throw new Error("Method not implemented.");
-        const newUser = await this.getById(id);
+    return add;
 
-        newUser.email = user.email
-        newUser.name = user.name
-        newUser.no_of_returns= user.no_of_returns
-        newUser.phone = user.phone
-        newUser.FileName = user.FileName;
+    // return this.customerRepo.insert(obj);
+  }
+  async delete(id: number): Promise<any> {
+    return this.customerRepo.delete(id);
+  }
+  async update(id: number, user: CustomerDTO): Promise<any> {
+    // throw new Error("Method not implemented.");
+    const newUser = await this.getById(id);
 
-        return this.customerRepo.update(id, newUser);
+    newUser.email = user.email;
+    newUser.name = user.name;
+    newUser.no_of_returns = user.no_of_returns;
+    newUser.phone = user.phone;
+    newUser.FileName = user.FileName;
 
-    }
-    getUserCustomer(): any
-    {
-        console.log("here")
-        return this.customerRepo.find({
-            relations: 
-            {
-                user:true
-            }
-        })
-    }
-    getUserWithCustomerId(id): any
-    {
-        console.log("here")
-        return this.customerRepo.find({
-            where:{id:id},
-            relations: 
-            {
-                user:true
-            }
-        })
-    }
+    return this.customerRepo.update(id, newUser);
+  }
+  getUserCustomer(): any {
+    console.log('here');
+    return this.customerRepo.find({
+      relations: {
+        user: true,
+      },
+    });
+  }
+  getUserWithCustomerId(id): any {
+    console.log('here');
+    return this.customerRepo.find({
+      where: { id: id },
+      relations: {
+        user: true,
+      },
+    });
+  }
 
-    getCartWithCustomerId(id): any
-    {
-        console.log("here")
-        return this.customerRepo.find({
-            where:{id:id},
-            relations: 
-            {
-                orderedItems:true
-            }
-        })
-    }
+  getCartWithCustomerId(id): any {
+    console.log('here');
+    return this.customerRepo.find({
+      where: { id: id },
+      relations: {
+        orderedItems: true,
+      },
+    });
+  }
 
-    async FileUpload(user:CustomerDTO): Promise<any>
-    {
-        console.log("file customer: ", user)
-        return await this.update(user.id, user)
-    }
+  async FileUpload(user: CustomerDTO): Promise<any> {
+    console.log('file customer: ', user);
+    return await this.update(user.id, user);
+  }
 
-    async sendEmail(mydata)
-    {
-        return   await this.mailerService.sendMail({
-               to: mydata.email,
-               subject: mydata.subject,
-               text: mydata.text, 
-             });
-       
-    }
+  async sendEmail(mydata) {
+    return await this.mailerService.sendMail({
+      to: mydata.email,
+      subject: mydata.subject,
+      text: mydata.text,
+    });
+  }
 
-    Order(order: OrderedItemsDTO)
-    {
-        // const m = new menuEntity()
-        // return this.menuService.getAll();
-    }
+  Order(order: OrderedItemsDTO) {
+    // const m = new menuEntity()
+    // return this.menuService.getAll();
+  }
 }
