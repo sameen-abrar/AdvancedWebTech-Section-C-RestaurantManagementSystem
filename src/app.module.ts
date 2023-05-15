@@ -17,12 +17,12 @@ import { UserService } from './User/user.service';
     (
       { 
         type: 'postgres',
-        host: 'localhost',
-        port: 5432,
+        host: 'containers-us-west-66.railway.app',
+        port: 7218,
         username: 'postgres',
-        password: 'sameen',
+        password: 'gNFY09WR0TG78js4e4CQ',
         //  password: "asdf",
-        database: 'RestaurantManagementSystem',
+        database: 'railway',
         autoLoadEntities: true,
         synchronize: true,
       }
